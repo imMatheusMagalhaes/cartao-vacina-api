@@ -21,7 +21,7 @@ export class PatientsService {
 
   async findPatientById(id: string) {
     const patient = await this.patientRepository.findOne(id,
-      { select: ['name', 'email', 'address', 'phone', 'cpf', 'age', 'vaccine', 'id'] })
+      { select: ['name', 'email', 'address', 'phone', 'cpf', 'age', 'vaccines', 'id'], relations: ['vaccines'] })
 
 
     if (!patient)
@@ -68,7 +68,23 @@ export class PatientsService {
     return patients;
   }
 
-  async createVaccine(createVaccineDto: CreateVaccineDto) {
-    return this.vaccineRepository.createVaccine(createVaccineDto)
+  async findAll() {
+    const list = await this.patientRepository.find({ relations: ['vaccines'] })
+
+    try {
+      if (list)
+        return list
+    } catch (error) {
+      throw new NotFoundException('Nenhum paciente cadastrado')
+    }
+  }
+
+  async createVaccine(createVaccineDto: CreateVaccineDto, id: string) {
+    const patient = await this.findPatientById(id)
+
+    if (patient)
+      return await this.vaccineRepository.createVaccine(createVaccineDto, patient)
+
+    throw new NotFoundException('Usuário não encontrado')
   }
 }

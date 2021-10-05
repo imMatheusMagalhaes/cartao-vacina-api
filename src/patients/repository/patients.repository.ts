@@ -47,10 +47,12 @@ export class PatientReporitory extends Repository<Patient>{
             if (name)
                 query.andWhere('patient.name ILIKE :name', { name: `%${name}%` });
 
+
             query.skip((queryDto.page - 1) * queryDto.limit);
             query.take(+queryDto.limit);
             query.orderBy(queryDto.sort ? JSON.parse(queryDto.sort) : undefined);
-            query.select(['patient.name', 'patient.email', 'patient.cpf']);
+            query.select(['patient.id','patient.name', 'patient.email', 'patient.cpf']);
+
 
             const [patients, total] = await query.getManyAndCount();
 

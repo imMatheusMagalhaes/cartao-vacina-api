@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import { Vaccine } from "./vaccine.entity";
 
 
@@ -26,8 +26,8 @@ export class Patient {
     @Column({ nullable: false, type: 'varchar', length: 10 })
     age: string
 
-    @OneToOne(() => Vaccine, (vaccine: Vaccine) => vaccine.patient)
-    vaccine: Vaccine
+    @OneToMany(() => Vaccine, vaccine => vaccine.patient)
+    vaccines: Vaccine[]
 
     @CreateDateColumn()
     createdAt: Date;

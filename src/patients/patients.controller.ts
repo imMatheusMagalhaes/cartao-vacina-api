@@ -38,12 +38,17 @@ export class PatientsController {
     const found = await this.patientsService.findPatient(query)
     return {
       found,
-      message: 'Usuários encontrados'
+      message: 'Usuário encontrado'
     }
   }
 
-  @Post('vaccines')
-  async createVaccine(createVaccineDto: CreateVaccineDto): Promise<Vaccine> {
-    return await this.patientsService.createVaccine(createVaccineDto)
+  @Get()
+  async findAll() {
+    return await this.patientsService.findAll()
+  }
+
+  @Post('vaccines/:id')
+  async createVaccine(@Body(ValidationPipe) createVaccineDto: CreateVaccineDto, @Param('id') id: string): Promise<Vaccine> {
+    return await this.patientsService.createVaccine(createVaccineDto, id)
   }
 }

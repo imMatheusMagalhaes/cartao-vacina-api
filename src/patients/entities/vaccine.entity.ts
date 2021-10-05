@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import { Patient } from "./patient.entity";
 
 @Entity()
@@ -18,8 +18,7 @@ export class Vaccine {
     @Column({ nullable: false, type: 'varchar', length: 200 })
     us: string
 
-    @OneToOne(() => Patient, (patient: Patient) => patient.vaccine)
-    @JoinColumn({ name: "patientId" })
+    @ManyToOne(() => Patient, patient => patient.vaccines)
     patient: Patient
 
     @CreateDateColumn()
